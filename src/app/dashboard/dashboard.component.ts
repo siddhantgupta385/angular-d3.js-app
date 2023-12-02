@@ -33,11 +33,21 @@ export class DashboardComponent implements OnInit, AfterViewInit  {
   sourceFilter: string | null = null;
   swotFilter: string | null = null;
 
+  // Dropdown options
+  endYearOptions: string[] = [];
+  topicsOptions: string[] = [];
+  sectorOptions: string[] = [];
+  regionOptions: string[] = [];
+  pestOptions: string[] = [];
+  sourceOptions: string[] = [];
+  swotOptions: string[] = [];
+
   // FIX_ME Pie chart will have only one attribute 
 
   ngOnInit() {
     this.data = data
     this.filteredData = data
+    this.updateDropdownOptions();
     this.extractYOptions()
     this.createSvg()
   }
@@ -60,11 +70,49 @@ export class DashboardComponent implements OnInit, AfterViewInit  {
         (this.swotFilter === null || item.swot === this.swotFilter)
       );
     });
+    // Update dropdown options based on selected filters
+    this.updateDropdownOptions();
+
     this.createBarChart();
   }
 
+  updateDropdownOptions() {
+    this.endYearOptions = this.getUniqueValues('end_year');
+    this.topicsOptions = this.getUniqueValues('topic');
+    this.sectorOptions = this.getUniqueValues('sector');
+    this.regionOptions = this.getUniqueValues('region');
+    this.pestOptions = this.getUniqueValues('pestle');
+    this.sourceOptions = this.getUniqueValues('source');
+    this.swotOptions = this.getUniqueValues('swot');
+  }
+
+
   getUniqueValues(key: string): string[] {
-    return Array.from(new Set(this.data.map((item:any) => item[key])));
+    let filteredData = this.data;
+
+    if (this.endYearFilter) {
+      filteredData = filteredData.filter((item:any) => item.end_year === this.endYearFilter);
+    }
+    if (this.topicsOptions) {
+      filteredData = filteredData.filter((item:any) => item.end_year === this.topicsOptions);
+    }
+    if (this.sectorOptions) {
+      filteredData = filteredData.filter((item:any) => item.end_year === this.sectorOptions);
+    }
+    if (this.regionOptions) {
+      filteredData = filteredData.filter((item:any) => item.end_year === this.regionOptions);
+    }
+    if (this.pestOptions) {
+      filteredData = filteredData.filter((item:any) => item.end_year === this.pestOptions);
+    }
+    if (this.sourceOptions) {
+      filteredData = filteredData.filter((item:any) => item.end_year === this.sourceOptions);
+    }
+    if (this.swotOptions) {
+      filteredData = filteredData.filter((item:any) => item.end_year === this.swotOptions);
+    }
+    
+    return Array.from(new Set(this.filteredData.map((item:any) => item[key])));
   }
 
   onGraphTypeChange() {
