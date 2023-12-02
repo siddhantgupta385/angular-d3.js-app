@@ -14,10 +14,14 @@ export class DashboardComponent implements OnInit, AfterViewInit  {
   data: any;
   yOptions: string[] = ['intensity', 'likelihood', 'relevance'];
   selectedYOption: string = 'intensity';
+  svg:any;
+  margin:any = { top: 20, right: 20, bottom: 30, left: 40 };
+  width:any = 600 - this.margin.left - this.margin.right;
+  height:any = 400 - this.margin.top - this.margin.bottom;
 
   ngOnInit() {
-    // Load your data from a service or directly here
     this.data = data
+    this.createSvg()
   }
 
   ngAfterViewInit() {
@@ -28,28 +32,29 @@ export class DashboardComponent implements OnInit, AfterViewInit  {
     this.createBarChart();
   }
 
-  createScatterPlot() {
-    const margin = { top: 20, right: 20, bottom: 30, left: 40 };
-    const width = 600 - margin.left - margin.right;
-    const height = 400 - margin.top - margin.bottom;
+  private createSvg() {
 
-    const svg = d3
-      .select('#scatter-plot')
+    this.svg = d3
+      .select('#bar-chart')
       .append('svg')
-      .attr('width', width + margin.left + margin.right)
-      .attr('height', height + margin.top + margin.bottom)
+      .attr('width', this.width + this.margin.left + this.margin.right)
+      .attr('height', this.height + this.margin.top + this.margin.bottom)
       .append('g')
-      .attr('transform', `translate(${margin.left},${margin.top})`);
+      .attr('transform', `translate(${this.margin.left},${this.margin.top})`);
+  }
 
-    const xScale:any = d3.scaleLinear().range([0, width]);
-    const yScale:any = d3.scaleLinear().range([height, 0]);
+
+  createScatterPlot() {
+
+    const xScale:any = d3.scaleLinear().range([0, this.width]);
+    const yScale:any = d3.scaleLinear().range([this.height, 0]);
     const sizeScale:any = d3.scaleLinear().range([5, 15]);
 
     xScale.domain([0, d3.max(this.data, (d:any) => d.intensity)]);
     yScale.domain([0, d3.max(this.data, (d:any) => d.likelihood)]);
     sizeScale.domain([0, d3.max(this.data, (d:any) => d.relevance)]);
 
-    svg.selectAll('circle')
+    this.svg.selectAll('circle')
       .data(this.data)
       .enter()
       .append('circle')
@@ -59,77 +64,70 @@ export class DashboardComponent implements OnInit, AfterViewInit  {
       .attr('fill', 'blue');
 
     // Add axes
-    svg.append('g')
-      .attr('transform', `translate(0,${height})`)
+    this.svg.append('g')
+      .attr('transform', `translate(0,${this.height})`)
       .call(d3.axisBottom(xScale));
-    svg.append('g').call(d3.axisLeft(yScale));
+    this.svg.append('g').call(d3.axisLeft(yScale));
 
     // Add labels
-    svg.append('text')
-      .attr('transform', `translate(${width / 2},${height + margin.top + 10})`)
+    this.svg.append('text')
+      .attr('transform', `translate(${this.width / 2},${this.height + this.margin.top + 10})`)
       .style('text-anchor', 'middle')
       .text('Intensity');
 
-    svg.append('text')
+    this.svg.append('text')
       .attr('transform', 'rotate(-90)')
-      .attr('y', 0 - margin.left)
-      .attr('x', 0 - height / 2)
+      .attr('y', 0 - this.margin.left)
+      .attr('x', 0 - this.height / 2)
       .attr('dy', '1em')
       .style('text-anchor', 'middle')
       .text('Likelihood');
   
-    console.log(svg)
+    console.log(this.svg)
     }
 
   createBarChart() {
-    const margin = { top: 20, right: 20, bottom: 30, left: 40 };
-    const width = 600 - margin.left - margin.right;
-    const height = 400 - margin.top - margin.bottom;
 
-    const svg = d3
-      .select('#bar-chart')
-      .append('svg')
-      .attr('width', width + margin.left + margin.right)
-      .attr('height', height + margin.top + margin.bottom)
-      .append('g')
-      .attr('transform', `translate(${margin.left},${margin.top})`);
+    // Clear the existing content of the x-axis and y-axis
+    this.svg.selectAll('*').remove();
+    this.svg.selectAll('*').remove();
 
-    const xScale:any = d3.scaleBand().range([0, width]).padding(0.1);
-    const yScale:any = d3.scaleLinear().range([height, 0]);
+    const xScale:any = d3.scaleBand().range([0, this.width]).padding(0.1);
+    const yScale:any = d3.scaleLinear().range([this.height, 0]);
 
     xScale.domain(this.data.map((d:any) => d.sector));
     yScale.domain([0, d3.max(this.data, (d:any) => d[this.selectedYOption])]);
 
-    svg.selectAll('rect')
+    this.svg.selectAll('rect')
       .data(this.data)
       .enter()
       .append('rect')
       .attr('x', (d:any) => xScale(d.sector))
       .attr('y', (d:any) => yScale(d[this.selectedYOption]))
       .attr('width', xScale.bandwidth())
-      .attr('height', (d:any) => height - yScale(d[this.selectedYOption]))
+      .attr('height', (d:any) => this.height - yScale(d[this.selectedYOption]))
       .attr('fill', 'steelblue');
 
     // Add axes
-    svg.append('g')
-      .attr('transform', `translate(0,${height})`)
+    this.svg.append('g')
+      .attr('transform', `translate(0,${this.height})`)
       .call(d3.axisBottom(xScale))
       .selectAll('text')
       .attr('transform', 'rotate(-45)')
       .style('text-anchor', 'end');
 
-    svg.append('g').call(d3.axisLeft(yScale));
+    this.svg.append('g').call(d3.axisLeft(yScale));
 
     // Add labels
-    svg.append('text')
-      .attr('transform', `translate(${width / 2},${height + margin.top + 40})`)
+    this.svg.append('text')
+      .attr('transform', `translate(${this.width / 2},${this.height + this.margin.top + 40})`)
       .style('text-anchor', 'middle')
       .text('Sectors');
 
-    svg.append('text')
+    this.svg.append('text')
       .attr('transform', 'rotate(-90)')
-      .attr('y', 0 - margin.left)
-      .attr('x', 0 - height / 2)
+      .attr('y', 0 - this.margin.left)
+      .attr('x', 0 - this.height / 2)
       .attr('dy', '1em')
       .style('text-anchor', 'middle')
       .text(this.selectedYOption);
