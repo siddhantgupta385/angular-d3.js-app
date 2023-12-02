@@ -1,0 +1,21 @@
+/* Add this to your component's styles or your global styles */
+
+#tooltip {
+    position: absolute;
+    text-align: center;
+    padding: 2px;
+    font-size: 12px;
+    background: lightsteelblue;
+    border: 1px solid steelblue;
+    border-radius: 5px;
+    pointer-events: none;
+    opacity: 0;
+}
+
+#bar-chart {
+    height: 450px!important;
+}
+
+.filters {
+    display: flex;
+}

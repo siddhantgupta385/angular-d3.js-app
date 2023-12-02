@@ -16,7 +16,7 @@ export class DashboardComponent implements OnInit, AfterViewInit  {
   yOptions: string[] =[];
   selectedYOption: string = 'intensity';
   xOptions: string[] =[];
-  selectedXOption: string = 'intensity';
+  selectedXOption: string = 'region';
   graphType: string[] = ['Bar Chart' , "Scatter Plot", "Pie Chart" , "Area Chart"];
   selectedGraphType: string = 'Bar Chart';
   svg:any;
@@ -112,7 +112,19 @@ export class DashboardComponent implements OnInit, AfterViewInit  {
       filteredData = filteredData.filter((item:any) => item.end_year === this.swotOptions);
     }
     
-    return Array.from(new Set(this.filteredData.map((item:any) => item[key])));
+    // return Array.from(new Set(this.filteredData.map((item:any) => {if(item != "") item[key]})));
+    return Array.from(new Set(this.filteredData.map((item:any) => item != "" && item[key])));
+  }
+  resetFilters() {
+    this.endYearFilter = null;
+    this.topicsFilter = null;
+    this.sectorFilter = null;
+    this.regionFilter = null;
+    this.pestFilter = null;
+    this.sourceFilter = null;
+    this.swotFilter = null;
+
+    this.applyFilters(); // Apply filters after resetting
   }
 
   onGraphTypeChange() {
@@ -173,7 +185,22 @@ export class DashboardComponent implements OnInit, AfterViewInit  {
       .attr('y', (d:any) => yScale(d[this.selectedYOption]))
       .attr('width', xScale.bandwidth())
       .attr('height', (d:any) => this.height - yScale(d[this.selectedYOption]))
-      .attr('fill', 'steelblue');
+      .attr('fill', 'steelblue')
+      .attr("class", "bar")
+      .attr("title", (d: any) => d[this.selectedYOption]) 
+      .on("mouseover", (event: any, d: any) => {
+        // Show tooltip on hover
+        const tooltip = d3.select("#tooltip");
+        tooltip.transition().duration(200).style("opacity", 0.9);
+        tooltip
+          .html(`${d[this.selectedXOption]}: ${d[this.selectedYOption]}`)
+          .style("left", event.pageX + "px")
+          .style("top", event.pageY - 28 + "px");
+      })
+      .on("mouseout", () => {
+        // Hide tooltip on mouseout
+        d3.select("#tooltip").transition().duration(500).style("opacity", 0);
+      });
 
     // Add axes
     this.svg.append('g')
@@ -190,7 +217,7 @@ export class DashboardComponent implements OnInit, AfterViewInit  {
       .attr('transform', `translate(${this.width / 2},${this.height + this.margin.top + 40})`)
       .style('text-anchor', 'middle')
       .text(this.selectedXOption);
-
+      
     this.svg.append('text')
       .attr('transform', 'rotate(-90)')
       .attr('y', 0 - this.margin.left)
@@ -198,6 +225,7 @@ export class DashboardComponent implements OnInit, AfterViewInit  {
       .attr('dy', '1em')
       .style('text-anchor', 'middle')
       .text(this.selectedYOption);
+
   }
 
   createScatterPlot() {
@@ -244,7 +272,6 @@ export class DashboardComponent implements OnInit, AfterViewInit  {
   
   }
   
-
   createPieChart() {
     // Clear the existing content of the SVG
     this.svg.selectAll('*').remove();
