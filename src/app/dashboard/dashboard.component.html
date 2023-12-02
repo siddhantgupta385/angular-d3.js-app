@@ -5,5 +5,12 @@
       <option *ngFor="let option of yOptions" [value]="option">{{ option }}</option>
     </select>
 </div>
-{{selectedYOption}}
+
+<div>
+    <label for="yAxis">Select Graph Type:</label>
+    <select id="yAxis" [(ngModel)]="selectedGraphType" (change)="onGraphTypeChange()">
+      <option *ngFor="let option of graphType" [value]="option">{{ option }}</option>
+    </select>
+</div>
+
 <div id="bar-chart"></div>

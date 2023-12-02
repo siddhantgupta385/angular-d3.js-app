@@ -12,8 +12,10 @@ import { data } from '../../environments/environment.development';
 })
 export class DashboardComponent implements OnInit, AfterViewInit  {
   data: any;
-  yOptions: string[] = ['intensity', 'likelihood', 'relevance'];
+  yOptions: string[] =[];
   selectedYOption: string = 'intensity';
+  graphType: string[] = ['Bar Chart' , "Scatter Plot"];
+  selectedGraphType: string = 'Bar Chart';
   svg:any;
   margin:any = { top: 20, right: 20, bottom: 30, left: 40 };
   width:any = 600 - this.margin.left - this.margin.right;
@@ -21,6 +23,7 @@ export class DashboardComponent implements OnInit, AfterViewInit  {
 
   ngOnInit() {
     this.data = data
+    this.extractYOptions()
     this.createSvg()
   }
 
@@ -28,8 +31,34 @@ export class DashboardComponent implements OnInit, AfterViewInit  {
     // this.createScatterPlot();
     this.createBarChart();
   }
+
   onYOptionChange() {
-    this.createBarChart();
+    switch(this.selectedGraphType){
+      case "Bar Chart":
+        this.createBarChart();
+        break;
+      case "Scatter Plot":
+        this.createScatterPlot();
+    }
+  }  
+  
+  onGraphTypeChange() {
+    switch(this.selectedGraphType){
+      case "Bar Chart":
+        this.createBarChart();
+        break;
+      case "Scatter Plot":
+        this.createScatterPlot();
+    }
+  }
+
+  private extractYOptions() {
+    if (this.data.length > 0) {
+      // Extract keys from the first data item as yOptions
+      this.yOptions = Object.keys(this.data[0]);
+      // Remove the keys that are not numeric (assuming these are your y-axis options)
+      this.yOptions = this.yOptions.filter((key) => typeof this.data[0][key] === 'number');
+    }
   }
 
   private createSvg() {
@@ -46,21 +75,24 @@ export class DashboardComponent implements OnInit, AfterViewInit  {
 
   createScatterPlot() {
 
+    // Clear the existing content of the x-axis and y-axis
+    this.svg.selectAll('*').remove();
+
     const xScale:any = d3.scaleLinear().range([0, this.width]);
     const yScale:any = d3.scaleLinear().range([this.height, 0]);
     const sizeScale:any = d3.scaleLinear().range([5, 15]);
 
     xScale.domain([0, d3.max(this.data, (d:any) => d.intensity)]);
-    yScale.domain([0, d3.max(this.data, (d:any) => d.likelihood)]);
-    sizeScale.domain([0, d3.max(this.data, (d:any) => d.relevance)]);
+    yScale.domain([0, d3.max(this.data, (d:any) => d[this.selectedYOption])]);
+    sizeScale.domain([0, 50]);
 
     this.svg.selectAll('circle')
       .data(this.data)
       .enter()
       .append('circle')
       .attr('cx', (d:any) => xScale(d.intensity))
-      .attr('cy', (d:any) => yScale(d.likelihood))
-      .attr('r', (d:any) => sizeScale(d.relevance))
+      .attr('cy', (d:any) => yScale(d[this.selectedYOption]))
+      .attr('r', (d:any) => sizeScale(1))
       .attr('fill', 'blue');
 
     // Add axes
@@ -73,7 +105,7 @@ export class DashboardComponent implements OnInit, AfterViewInit  {
     this.svg.append('text')
       .attr('transform', `translate(${this.width / 2},${this.height + this.margin.top + 10})`)
       .style('text-anchor', 'middle')
-      .text('Intensity');
+      .text('Sectors');
 
     this.svg.append('text')
       .attr('transform', 'rotate(-90)')
@@ -81,15 +113,13 @@ export class DashboardComponent implements OnInit, AfterViewInit  {
       .attr('x', 0 - this.height / 2)
       .attr('dy', '1em')
       .style('text-anchor', 'middle')
-      .text('Likelihood');
+      .text(this.selectedYOption);
   
-    console.log(this.svg)
     }
 
   createBarChart() {
 
     // Clear the existing content of the x-axis and y-axis
-    this.svg.selectAll('*').remove();
     this.svg.selectAll('*').remove();
 
     const xScale:any = d3.scaleBand().range([0, this.width]).padding(0.1);
