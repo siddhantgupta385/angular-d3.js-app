@@ -79,8 +79,12 @@
           <option *ngFor="let option of graphType" [value]="option">{{ option }}</option>
         </select>
     </div> -->
-
-    <div id="bar-chart"></div>
+    <div style="width: fit-content;">
+        <div id="bar-chart"></div>
+        <div id="x-axis-label">
+            {{selectedXOption}}
+        </div>
+    </div>
     <div id="tooltip"></div>
 
 

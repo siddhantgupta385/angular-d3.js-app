@@ -210,6 +210,7 @@ export class DashboardComponent implements OnInit, AfterViewInit  {
       .attr('transform', 'rotate(-45)')
       .style('text-anchor', 'end');
 
+    this.svg.selectAll('.tick text').remove();
     this.svg.append('g').call(d3.axisLeft(yScale));
 
     // Add labels
