@@ -1,16 +1,87 @@
-<!-- <div id="scatter-plot"></div> -->
+<!-- dashboard.component.html -->
 <div>
-    <label for="yAxis">Select Y-Axis:</label>
-    <select id="yAxis" [(ngModel)]="selectedYOption" (change)="onYOptionChange()">
-      <option *ngFor="let option of yOptions" [value]="option">{{ option }}</option>
-    </select>
-</div>
 
-<div>
-    <label for="yAxis">Select Graph Type:</label>
-    <select id="yAxis" [(ngModel)]="selectedGraphType" (change)="onGraphTypeChange()">
-      <option *ngFor="let option of graphType" [value]="option">{{ option }}</option>
-    </select>
-</div>
+    <div>
+        <label for="yAxis">Select Y-Axis:</label>
+        <select id="yAxis" [(ngModel)]="selectedYOption" (change)="onGraphTypeChange()">
+          <option *ngFor="let option of yOptions" [value]="option">{{ option }}</option>
+        </select>
+    </div>
+    <div>
+        <label for="yAxis">Select X-Axis:</label>
+        <select id="yAxis" [(ngModel)]="selectedXOption" (change)="onGraphTypeChange()">
+          <option *ngFor="let option of xOptions" [value]="option">{{ option }}</option>
+        </select>
+    </div>
 
-<div id="bar-chart"></div>
+    <div>
+        <label for="yAxis">Select Graph Type:</label>
+        <select id="yAxis" [(ngModel)]="selectedGraphType" (change)="onGraphTypeChange()">
+          <option *ngFor="let option of graphType" [value]="option">{{ option }}</option>
+        </select>
+    </div>
+
+    <div id="bar-chart"></div>
+
+    <div>
+
+        <div>
+            <label for="endYearFilter">End Year:</label>
+            <select id="endYearFilter" [(ngModel)]="endYearFilter">
+        <option value="">All</option>
+        <option *ngFor="let year of getUniqueValues('end_year')" [value]="year">{{ year }}</option>
+      </select>
+        </div>
+
+        <div>
+            <label for="topicsFilter">Topics:</label>
+            <select id="topicsFilter" [(ngModel)]="topicsFilter">
+        <option value="">All</option>
+        <option *ngFor="let topic of getUniqueValues('topic')" [value]="topic">{{ topic }}</option>
+      </select>
+        </div>
+
+        <div>
+            <label for="sectorFilter">Sector:</label>
+            <select id="sectorFilter" [(ngModel)]="sectorFilter">
+        <option value="">All</option>
+        <option *ngFor="let sector of getUniqueValues('sector')" [value]="sector">{{ sector }}</option>
+      </select>
+        </div>
+
+        <div>
+            <label for="regionFilter">Region:</label>
+            <select id="regionFilter" [(ngModel)]="regionFilter">
+        <option value="">All</option>
+        <option *ngFor="let region of getUniqueValues('region')" [value]="region">{{ region }}</option>
+      </select>
+        </div>
+
+        <div>
+            <label for="pestFilter">PEST:</label>
+            <select id="pestFilter" [(ngModel)]="pestFilter">
+        <option value="">All</option>
+        <option *ngFor="let pest of getUniqueValues('pestle')" [value]="pest">{{ pest }}</option>
+      </select>
+        </div>
+
+        <div>
+            <label for="sourceFilter">Source:</label>
+            <select id="sourceFilter" [(ngModel)]="sourceFilter">
+        <option value="">All</option>
+        <option *ngFor="let source of getUniqueValues('source')" [value]="source">{{ source }}</option>
+      </select>
+        </div>
+
+        <div>
+            <label for="swotFilter">SWOT:</label>
+            <select id="swotFilter" [(ngModel)]="swotFilter">
+        <option value="">All</option>
+        <option *ngFor="let swot of getUniqueValues('swot')" [value]="swot">{{ swot }}</option>
+      </select>
+        </div>
+
+        <button (click)="applyFilters()">Apply Filters</button>
+    </div>
+
+</div>
