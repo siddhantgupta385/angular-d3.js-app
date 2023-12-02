@@ -1,2 +1,9 @@
 <!-- <div id="scatter-plot"></div> -->
+<div>
+    <label for="yAxis">Select Y-Axis:</label>
+    <select id="yAxis" [(ngModel)]="selectedYOption" (change)="onYOptionChange()">
+      <option *ngFor="let option of yOptions" [value]="option">{{ option }}</option>
+    </select>
+</div>
+{{selectedYOption}}
 <div id="bar-chart"></div>

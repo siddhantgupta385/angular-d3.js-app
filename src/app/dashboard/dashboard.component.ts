@@ -1,15 +1,19 @@
-import { AfterViewInit, Component, OnInit } from '@angular/core';
+import { FormsModule } from '@angular/forms';
+import { CommonModule } from '@angular/common';
+import { AfterViewInit, Component, Input, OnInit } from '@angular/core';
 import * as d3 from 'd3';
 import { data } from '../../environments/environment.development';
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [],
+  imports: [CommonModule, FormsModule],
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.css'
 })
 export class DashboardComponent implements OnInit, AfterViewInit  {
   data: any;
+  yOptions: string[] = ['intensity', 'likelihood', 'relevance'];
+  selectedYOption: string = 'intensity';
 
   ngOnInit() {
     // Load your data from a service or directly here
@@ -18,6 +22,9 @@ export class DashboardComponent implements OnInit, AfterViewInit  {
 
   ngAfterViewInit() {
     // this.createScatterPlot();
+    this.createBarChart();
+  }
+  onYOptionChange() {
     this.createBarChart();
   }
 
@@ -90,17 +97,17 @@ export class DashboardComponent implements OnInit, AfterViewInit  {
     const xScale:any = d3.scaleBand().range([0, width]).padding(0.1);
     const yScale:any = d3.scaleLinear().range([height, 0]);
 
-    xScale.domain(this.data.map((d:any) => d.title));
-    yScale.domain([0, d3.max(this.data, (d:any) => d.intensity)]);
+    xScale.domain(this.data.map((d:any) => d.sector));
+    yScale.domain([0, d3.max(this.data, (d:any) => d[this.selectedYOption])]);
 
     svg.selectAll('rect')
       .data(this.data)
       .enter()
       .append('rect')
-      .attr('x', (d:any) => xScale(d.title))
-      .attr('y', (d:any) => yScale(d.intensity))
+      .attr('x', (d:any) => xScale(d.sector))
+      .attr('y', (d:any) => yScale(d[this.selectedYOption]))
       .attr('width', xScale.bandwidth())
-      .attr('height', (d:any) => height - yScale(d.intensity))
+      .attr('height', (d:any) => height - yScale(d[this.selectedYOption]))
       .attr('fill', 'steelblue');
 
     // Add axes
@@ -115,9 +122,9 @@ export class DashboardComponent implements OnInit, AfterViewInit  {
 
     // Add labels
     svg.append('text')
-      .attr('transform', `translate(${width / 2},${height + margin.top + 10})`)
+      .attr('transform', `translate(${width / 2},${height + margin.top + 40})`)
       .style('text-anchor', 'middle')
-      .text('Titles');
+      .text('Sectors');
 
     svg.append('text')
       .attr('transform', 'rotate(-90)')
@@ -125,7 +132,7 @@ export class DashboardComponent implements OnInit, AfterViewInit  {
       .attr('x', 0 - height / 2)
       .attr('dy', '1em')
       .style('text-anchor', 'middle')
-      .text('Intensity');
+      .text(this.selectedYOption);
   }
   
 }
