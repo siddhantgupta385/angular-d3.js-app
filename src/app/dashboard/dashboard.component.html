@@ -5,57 +5,50 @@
         <div>
             <label for=" endYearFilter ">End Year:</label>
             <select id="endYearFilter " [(ngModel)]="endYearFilter " (ngModelChange)="applyFilters() ">
-        <option value=" ">All</option>
-        <option *ngFor="let year of getUniqueValues( 'end_year') " [value]="year ">{{ year }}</option>
-      </select>
+              <option *ngFor="let year of getUniqueValues( 'end_year') " [value]="year ">{{ year }}</option>
+            </select>
         </div>
 
         <div>
             <label for="topicsFilter ">Topics:</label>
-            <select id="topicsFilter " [(ngModel)]="topicsFilter " (ngModelChange)="applyFilters() ">
-        <option value=" ">All</option>
-        <option *ngFor="let topic of getUniqueValues( 'topic') " [value]="topic ">{{ topic }}</option>
-      </select>
+            <select id="topicsFilter " [(ngModel)]="topicsFilter " (ngModelChange)="applyFilters() " name="topics">
+              <option *ngFor="let topic of getUniqueValues( 'topic') " [value]="topic ">{{ topic }}</option>
+            </select>
         </div>
 
         <div>
             <label for="sectorFilter ">Sector:</label>
             <select id="sectorFilter " [(ngModel)]="sectorFilter " (ngModelChange)="applyFilters() ">
-        <option value=" ">All</option>
-        <option *ngFor="let sector of getUniqueValues( 'sector') " [value]="sector ">{{ sector }}</option>
-      </select>
+              <option *ngFor="let sector of getUniqueValues( 'sector') " [value]="sector ">{{ sector }}</option>
+            </select>
         </div>
 
         <div>
             <label for="regionFilter ">Region:</label>
             <select id="regionFilter " [(ngModel)]="regionFilter " (ngModelChange)="applyFilters() ">
-        <option value=" ">All</option>
-        <option *ngFor="let region of getUniqueValues( 'region') " [value]="region ">{{ region }}</option>
-      </select>
+              <option *ngFor="let region of getUniqueValues( 'region') " [value]="region ">{{ region }}</option>
+            </select>
         </div>
 
         <div>
             <label for="pestFilter ">PEST:</label>
             <select id="pestFilter " [(ngModel)]="pestFilter " (ngModelChange)="applyFilters() ">
-        <option value=" ">All</option>
-        <option *ngFor="let pest of getUniqueValues( 'pestle') " [value]="pest ">{{ pest }}</option>
-      </select>
+              <option *ngFor="let pest of getUniqueValues( 'pestle') " [value]="pest ">{{ pest }}</option>
+            </select>
         </div>
 
         <div>
             <label for="sourceFilter ">Source:</label>
             <select id="sourceFilter " [(ngModel)]="sourceFilter " (ngModelChange)="applyFilters() ">
-        <option value=" ">All</option>
-        <option *ngFor="let source of getUniqueValues( 'source') " [value]="source ">{{ source }}</option>
-      </select>
+              <option *ngFor="let source of getUniqueValues( 'source') " [value]="source ">{{ source }}</option>
+            </select>
         </div>
 
         <div>
             <label for="swotFilter ">SWOT:</label>
             <select id="swotFilter " [(ngModel)]="swotFilter " (ngModelChange)="applyFilters() ">
-        <option value=" ">All</option>
-        <option *ngFor="let swot of getUniqueValues( 'swot') " [value]="swot ">{{ swot }}</option>
-      </select>
+              <option *ngFor="let swot of getUniqueValues( 'swot') " [value]="swot ">{{ swot }}</option>
+            </select>
         </div>
 
         <button (click)="resetFilters() ">Reset Filters</button>
