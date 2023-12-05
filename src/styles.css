@@ -1,1 +1,5 @@
-/* You can add global styles to this file, and also import other style files */
+select {
+    width: 230px!important;
+    position: absolute;
+    left: 168px;
+}

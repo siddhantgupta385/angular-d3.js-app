@@ -1,84 +1,98 @@
 <!-- dashboard.component.html -->
 <div>
-    <div class="filters">
+    <div class="row" style="display: flex;">
 
-        <div>
-            <label for=" endYearFilter ">End Year:</label>
-            <select id="endYearFilter " [(ngModel)]="endYearFilter " (ngModelChange)="applyFilters() ">
+        <div class="filters col-md-6">
+
+            <div class="center">
+                <label for=" endYearFilter ">End Year:</label>
+                <select id="endYearFilter " [(ngModel)]="endYearFilter " (ngModelChange)="applyFilters() ">
               <option *ngFor="let year of getUniqueValues( 'end_year') " [value]="year ">{{ year }}</option>
             </select>
-        </div>
+            </div>
 
-        <div>
-            <label for="topicsFilter ">Topics:</label>
-            <select id="topicsFilter " [(ngModel)]="topicsFilter " (ngModelChange)="applyFilters() " name="topics">
+            <div>
+                <label for="topicsFilter ">Topics:</label>
+                <select id="topicsFilter " [(ngModel)]="topicsFilter " (ngModelChange)="applyFilters() " name="topics">
               <option *ngFor="let topic of getUniqueValues( 'topic') " [value]="topic ">{{ topic }}</option>
             </select>
-        </div>
+            </div>
 
-        <div>
-            <label for="sectorFilter ">Sector:</label>
-            <select id="sectorFilter " [(ngModel)]="sectorFilter " (ngModelChange)="applyFilters() ">
+            <div>
+                <label for="sectorFilter ">Sector:</label>
+                <select id="sectorFilter " [(ngModel)]="sectorFilter " (ngModelChange)="applyFilters() ">
               <option *ngFor="let sector of getUniqueValues( 'sector') " [value]="sector ">{{ sector }}</option>
             </select>
-        </div>
+            </div>
 
-        <div>
-            <label for="regionFilter ">Region:</label>
-            <select id="regionFilter " [(ngModel)]="regionFilter " (ngModelChange)="applyFilters() ">
+            <div>
+                <label for="regionFilter ">Region:</label>
+                <select id="regionFilter " [(ngModel)]="regionFilter " (ngModelChange)="applyFilters() ">
               <option *ngFor="let region of getUniqueValues( 'region') " [value]="region ">{{ region }}</option>
             </select>
-        </div>
+            </div>
 
-        <div>
-            <label for="pestFilter ">PEST:</label>
-            <select id="pestFilter " [(ngModel)]="pestFilter " (ngModelChange)="applyFilters() ">
+            <div>
+                <label for="pestFilter ">PEST:</label>
+                <select id="pestFilter " [(ngModel)]="pestFilter " (ngModelChange)="applyFilters() ">
               <option *ngFor="let pest of getUniqueValues( 'pestle') " [value]="pest ">{{ pest }}</option>
             </select>
-        </div>
+            </div>
 
-        <div>
-            <label for="sourceFilter ">Source:</label>
-            <select id="sourceFilter " [(ngModel)]="sourceFilter " (ngModelChange)="applyFilters() ">
+            <div>
+                <label for="sourceFilter ">Source:</label>
+                <select id="sourceFilter " [(ngModel)]="sourceFilter " (ngModelChange)="applyFilters() ">
               <option *ngFor="let source of getUniqueValues( 'source') " [value]="source ">{{ source }}</option>
             </select>
-        </div>
+            </div>
 
-        <div>
-            <label for="swotFilter ">SWOT:</label>
-            <select id="swotFilter " [(ngModel)]="swotFilter " (ngModelChange)="applyFilters() ">
+            <div>
+                <label for="swotFilter ">SWOT:</label>
+                <select id="swotFilter " [(ngModel)]="swotFilter " (ngModelChange)="applyFilters() ">
               <option *ngFor="let swot of getUniqueValues( 'swot') " [value]="swot ">{{ swot }}</option>
             </select>
+            </div>
+
+            <br>
+            <div class="resetButton">
+                <button (click)="resetFilters() ">Reset Filters</button>
+            </div>
+
+            <br>
+            <div>
+                <div class="col-md-2">
+                    <label for="yAxis">Select Y-Axis:</label>
+                    <select id="yAxis" [(ngModel)]="selectedYOption" (change)="onGraphTypeChange()">
+              <option *ngFor="let option of yOptions" [value]="option">{{ option }}</option>
+            </select>
+                </div>
+                <div class="col-md-2">
+                    <label for="yAxis">Select X-Axis:</label>
+                    <select id="yAxis" [(ngModel)]="selectedXOption" (change)="onGraphTypeChange()">
+              <option *ngFor="let option of xOptions" [value]="option">{{ option }}</option>
+            </select>
+                </div>
+            </div>
         </div>
 
-        <button (click)="resetFilters() ">Reset Filters</button>
-    </div>
-    <div>
-        <label for="yAxis">Select Y-Axis:</label>
-        <select id="yAxis" [(ngModel)]="selectedYOption" (change)="onGraphTypeChange()">
-          <option *ngFor="let option of yOptions" [value]="option">{{ option }}</option>
-        </select>
-    </div>
-    <div>
-        <label for="yAxis">Select X-Axis:</label>
-        <select id="yAxis" [(ngModel)]="selectedXOption" (change)="onGraphTypeChange()">
-          <option *ngFor="let option of xOptions" [value]="option">{{ option }}</option>
-        </select>
-    </div>
 
-    <!-- <div>
+
+        <!-- <div>
         <label for="yAxis">Select Graph Type:</label>
         <select id="yAxis" [(ngModel)]="selectedGraphType" (change)="onGraphTypeChange()">
           <option *ngFor="let option of graphType" [value]="option">{{ option }}</option>
         </select>
     </div> -->
-    <div style="width: fit-content;">
-        <div id="bar-chart"></div>
-        <div id="x-axis-label">
-            {{selectedXOption}}
+        <div class="col-md-6">
+            <div style="width: fit-content;">
+                <div id="bar-chart"></div>
+                <div id="x-axis-label">
+                    {{selectedXOption}}
+                </div>
+            </div>
+            <div id="tooltip"></div>
         </div>
     </div>
-    <div id="tooltip"></div>
 
 
 </div>

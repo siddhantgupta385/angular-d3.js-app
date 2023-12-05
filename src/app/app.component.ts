@@ -1,3 +1,5 @@
+import { FooterComponent } from './footer/footer.component';
+import { HeaderComponent } from './header/header.component';
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterOutlet } from '@angular/router';
@@ -7,7 +9,7 @@ import { FormsModule } from '@angular/forms';
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [CommonModule, RouterOutlet, DashboardComponent , FormsModule],
+  imports: [CommonModule, RouterOutlet, DashboardComponent , FormsModule , HeaderComponent , FooterComponent],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'
 })
